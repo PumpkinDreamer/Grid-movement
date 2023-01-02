@@ -1,0 +1,82 @@
+/* create a map */
+var map = document.createElement('div');
+map.style.width = '60000px';
+map.style.height = '60000px';
+map.style.backgroundColor = 'lightgreen';
+map.style.position = 'relative';
+document.body.appendChild(map);
+
+/* creates a display that shows the coordinates of the map that the mouse pointer is currently in */
+var display = document.createElement('div');
+display.style.position = 'absolute';
+display.style.top = '0px';
+display.style.left = '0px';
+display.style.backgroundColor = 'white';
+display.style.border = '1px solid black';
+display.style.fontFamily = 'monospace';
+display.style.fontSize = '24px';
+display.style.zIndex = '1';
+display.innerHTML = '0, 0';
+document.body.appendChild(display);
+
+/* show the coordinates of the mouse pointer in 50 pixel increments */
+map.addEventListener('mousemove', function(e) {
+  display.innerHTML = Math.floor(e.clientX / 50) + ', ' + Math.floor(e.clientY / 50);
+});
+
+/* creates a mouse cursor */
+var cursor = document.createElement('div');
+cursor.style.position = 'absolute';
+cursor.style.top = '0px';
+cursor.style.left = '0px';
+cursor.style.width = '50px';
+cursor.style.height = '50px';
+cursor.style.backgroundColor = 'red';
+cursor.style.zIndex = '2';
+document.body.appendChild(cursor);
+
+/* the mouse cursor follows the mouse pointer */
+map.addEventListener('mousemove', function(e) {
+  cursor.style.top = (Math.floor(e.clientY / 50) * 50) + 'px';
+  cursor.style.left = (Math.floor(e.clientX / 50) * 50) + 'px';
+  cursor.style.opacity = '0.5';
+  cursor.style.opacity = '0.5';
+
+});
+
+
+/* create a small hud region at the top of the screen */
+var hud = document.createElement('div');
+hud.style.position = 'absolute';
+hud.style.top = '0px';
+hud.style.left = '0px';
+hud.style.width = '100%';
+hud.style.height = '50px';
+hud.style.backgroundColor = 'white';
+hud.style.zIndex = '3';
+hud.style.position = 'fixed';
+document.body.appendChild(hud);
+
+/* move the coordinates to the hud */
+hud.appendChild(display);
+
+/* the camera follows the mouse */
+map.addEventListener('mousemove', function(e) {
+  map.style.top = -(Math.floor(e.clientY / 50) * 50) + 'px';
+  map.style.left = -(Math.floor(e.clientX / 50) * 50) + 'px';
+});
+
+/* scatter dark green pixels in randomly over the whole map between 1px by 1px and 2px by 2px in diameter */
+for (var i = 0; i < 10000; i++) {
+  var pixel = document.createElement('div');
+  pixel.style.position = 'absolute';
+  pixel.style.top = Math.floor(Math.random() * 60000) + 'px';
+  pixel.style.left = Math.floor(Math.random() * 60000) + 'px';
+  pixel.style.width = Math.floor(Math.random() * 4) + 1 + 'px';
+  pixel.style.height = Math.floor(Math.random() * 4) + 1 + 'px';
+  pixel.style.backgroundColor = 'darkgreen';
+  map.appendChild(pixel);
+}
+
+/* the camera's movement is smooth */
+map.style.transition = 'top 1s, left 1s';
